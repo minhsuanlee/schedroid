@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Schedroid</string>
+    <string name="schedroid">Schedroid</string>
+    <string name="login">Login</string>
+    <string name="sign_up">
+        <u>Sign Up</u>
+    </string>
+    <string name="password">Password:</string>
+    <string name="username">Username:</string>
+    <string name="please_enter_your_username">Please enter your username</string>
+    <string name="please_enter_your_password">Please enter your password</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="please_enter_your_full_name">Please enter your full name</string>
+    <string name="please_enter_your_phone_number">Please enter your phone number</string>
 </resources>
