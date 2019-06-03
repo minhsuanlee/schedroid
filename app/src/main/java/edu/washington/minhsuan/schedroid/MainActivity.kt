@@ -15,7 +15,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         val db = DatabaseHelper(applicationContext)
 
@@ -48,18 +47,12 @@ class MainActivity : AppCompatActivity() {
             signUpIntent()
         }
 
-        // To delete later
+        // To delete later (below)
         val btnDelete = findViewById<Button>(R.id.btnDelete)
         btnDelete.setOnClickListener{
-            db.deleteAll()
-            var data = db.readData()
-            var result = ""
-            for (i in 0 until (data.size - 1)) {
-                val user = data.get(i)
-                result = "$result $user\n"
-            }
-            Toast.makeText(this@MainActivity, "$result", Toast.LENGTH_SHORT).show()
+            db.deleteAll("Users")
         }
+        // To delete later (above)
     }
 
     private fun logInIntent(username: String, password: String) {

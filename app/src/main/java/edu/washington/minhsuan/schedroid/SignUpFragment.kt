@@ -66,12 +66,20 @@ class SignUpFragment : Fragment() {
     }
 
     private fun readAll(db: DatabaseHelper) {
-        var data = db.readData()
+        var dataUsers = db.readData()
         var result = ""
-        for (i in 0 until (data.size - 1)) {
-            val user = data.get(i)
+        for (i in 0 until (dataUsers.size - 1)) {
+            val user = dataUsers.get(i)
             result = "$result $user\n"
         }
         Toast.makeText(activity, "$result", Toast.LENGTH_SHORT).show()
+
+        var dataEvents = db.readEvents()
+        var resultEvents = ""
+        for (i in 0 until (dataEvents.size - 1)) {
+            val event = dataEvents.get(i)
+            resultEvents = "$resultEvents $event\n"
+        }
+        Toast.makeText(activity, "$resultEvents", Toast.LENGTH_SHORT).show()
     }
 }

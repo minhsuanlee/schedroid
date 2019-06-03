@@ -1,7 +1,6 @@
 package edu.washington.minhsuan.schedroid
 
 class User {
-    var id: Int = 0
     var full_name: String = ""
     var phone_num: String = ""
     var username: String = ""
@@ -17,7 +16,7 @@ class User {
     }
 
     override fun toString(): String {
-        return "id: $id, name: $full_name, phone: $phone_num, username: $username, password: $password"
+        return "name: $full_name, phone: $phone_num, username: $username, password: $password"
     }
 
 }
