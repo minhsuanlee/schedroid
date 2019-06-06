@@ -8,12 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 
-
-class OnedayFragment:Fragment() {
+//click an event  - go back to one day view
+class DeleteOneEventFragment : Fragment() {
+    private var listener: DoneDelete? = null
     var user : String? = null
     var day : String? = null
-    private var listener: AddEvent? = null
-    private var listener1: DeleteEvent? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -23,67 +23,56 @@ class OnedayFragment:Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.one_day_view, container, false)
+        return inflater.inflate(R.layout.delete_one_event, container, false)
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         super.onViewCreated(view, savedInstanceState)
-        val title = view.findViewById<TextView>(R.id.txt_title)
-        val createBtn = view.findViewById<Button>(R.id.btn_addNew)
-        val deleteBtn = view.findViewById<Button>(R.id.btn_deleteEvent)
-        val list = view.findViewById<ListView>(R.id.display_oneday_list)
+        val list = view.findViewById<ListView>(R.id.delete_listview)
+        val title = view.findViewById<TextView>(R.id.delete_title)
+        title.text = "Delete an Event in " + day
 
-        //TODO: get events display
+        //todo: display
         // title time location description daily(y/n
         var sample = arrayOf<String>()
-        val sample1 = "title" + "\ntime" + "\nlocation" + "\ndescription" + "\ndaily"
-        val sample2 = "title2" + "\ntime" + "\nlocation" + "\ndescription" + "\ndaily"
+        val sample1 = "title" + " at time"
+        val sample2 = "title2" + " at time"
         //sample.add(sample1)
         sample[0] = sample1
         sample[1] = sample2
 
         val adapter = ArrayAdapter<String>(this as Context, android.R.layout.simple_list_item_1, sample)
         list.adapter = adapter
+        list.setOnItemClickListener { _: AdapterView<*>?, _: View?, position: Int, _: Long ->
+            //val temp = list.getItemAtPosition(position).toString().split(" (")[0].trim()
 
+            //todo: delete from database : use title and time
 
-        title.text = "Schedule for " + day
-        createBtn.setOnClickListener{
-            listener?.AddEvent()
-        }
-        deleteBtn.setOnClickListener {
-            listener1?.DeleteEvent()
+            listener?.DoneDelete()
         }
 
     }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
-        if (context is AddEvent) {
+        if (context is DoneDelete) {
             listener = context
-        } else if (context is DeleteEvent) {
-            listener1 = context
         } else throw RuntimeException("$context must implement ...")
     }
 
     override fun onDetach() {
         super.onDetach()
         listener = null
-        listener1 = null
-    }
-    interface AddEvent {
-        fun AddEvent()
     }
 
-    interface DeleteEvent {
-        fun DeleteEvent()
+    interface DoneDelete {
+        fun DoneDelete()
     }
 
     companion object {
-        fun newInstance(user: String, day: String) = OnedayFragment().apply {
+        fun newInstance(userName: String, day: String) = DeleteOneEventFragment().apply {
             arguments = Bundle().apply {
-                putString("user", user)
+                putString("user", userName)
                 putString("day", day)
             }
         }

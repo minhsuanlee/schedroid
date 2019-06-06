@@ -1,5 +1,6 @@
 package edu.washington.minhsuan.schedroid
 
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -10,7 +11,7 @@ import android.widget.EditText
 
 
 class CreateNewEventFragment : Fragment() {
-    private var listener: Back? = null
+    private var listener: DoneCreate? = null
     var user : String? = null
 
 
@@ -33,14 +34,30 @@ class CreateNewEventFragment : Fragment() {
         val inputDaily = view.findViewById<EditText>(R.id.edit_Y_or_N)
         val btn_ok = view.findViewById<Button>(R.id.btn_ok)
 
-        //TODO: back to which page?
+        val btn_map = view.findViewById<Button>(R.id.btn_open_map)
+        // TODO: open map
+
+
         btn_ok.setOnClickListener {
-            listener?.Back()
+            //TODO: add the new event to the database
+            listener?.DoneCreate()
         }
     }
 
-    interface fun Back() {
-        fun Back()
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        if (context is DoneCreate) {
+            listener = context
+        } else throw RuntimeException("$context must implement ...")
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
+    }
+
+    interface DoneCreate {
+        fun DoneCreate()
     }
 
     companion object {

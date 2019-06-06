@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 
-class MultiActivity : AppCompatActivity() , CalendarFragment.ViewDay, OnedayFragment.AddEvent, CreateNewEventFragment.Back{
+class MultiActivity : AppCompatActivity() , CalendarFragment.ViewDay, OnedayFragment.AddEvent, OnedayFragment.DeleteEvent, CreateNewEventFragment.DoneCreate, DeleteOneEventFragment.DoneDelete{
     private val fragmentManager = supportFragmentManager
 
     var userM = ""
+    var day = ""
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.quiz)
@@ -16,19 +18,26 @@ class MultiActivity : AppCompatActivity() , CalendarFragment.ViewDay, OnedayFrag
         fragment = CalendarFragment.newInstance(userM)
     }
 
+    override fun ViewDay() {
+        val ft = fragmentManager.beginTransaction()
+        ft.replace(R.id.frameLayout, OnedayFragment.newInstance(userM, day))
+        ft.commit()
+    }
     override fun AddEvent() {
         val ft = fragmentManager.beginTransaction()
         ft.replace(R.id.frameLayout, CreateNewEventFragment.newInstance(userM))
         ft.commit()
     }
-    override fun Back() {
+    override fun DeleteEvent() {
+        val ft = fragmentManager.beginTransaction()
+        ft.replace(R.id.frameLayout, DeleteOneEventFragment.newInstance(userM, day))
+        ft.commit()
+    }
+    override fun DoneCreate() {
         ViewDay()
     }
-
-    override fun ViewDay() {
-        val ft = fragmentManager.beginTransaction()
-        ft.replace(R.id.frameLayout, OnedayFragment.newInstance(userM, day))
-        ft.commit()
+    override fun DoneDelete() {
+        ViewDay()
     }
 
     companion object {
