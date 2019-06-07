@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "928684524581",
+    "firebase_url": "https://schedroid-2102d.firebaseio.com",
+    "project_id": "schedroid-2102d",
+    "storage_bucket": "schedroid-2102d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928684524581:android:231d73fa5d5de4bb",
+        "android_client_info": {
+          "package_name": "edu.washington.minhsuan.schedroid"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "928684524581-au2qv8is9coujb2o661kb8p9pji43n2q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.washington.minhsuan.schedroid",
+            "certificate_hash": "1ab93771b04e34be34eb79a2001638acdc20f8d9"
+          }
+        },
+        {
+          "client_id": "928684524581-0n6rohcb6s636g5e9cu6oe945v5o6do6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpA0Xwioyut2bl55jwzjJHszwvWE1ATk0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "928684524581-0n6rohcb6s636g5e9cu6oe945v5o6do6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : AppCompatActivity() {
 
@@ -16,7 +17,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
 
-        val db = DatabaseHelper(applicationContext)
+        //val db = DatabaseHelper(applicationContext)
+        val db = FirebaseFirestore.getInstance()
 
         val usernameE = findViewById<EditText>(R.id.etxtUsername)
         val passwordE = findViewById<EditText>(R.id.etxtPassword)

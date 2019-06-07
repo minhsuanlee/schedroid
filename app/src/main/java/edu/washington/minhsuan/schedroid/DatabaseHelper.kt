@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.database.DatabaseUtils
 import android.util.Log
 
-
 class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     val TAG = "DatabaseHelper"
 
