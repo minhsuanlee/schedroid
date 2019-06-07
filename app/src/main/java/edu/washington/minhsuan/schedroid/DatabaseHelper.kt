@@ -74,7 +74,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         }
     }
 
-    fun readData(): MutableList<User> {
+    fun readUsers(): MutableList<User> {
         val userList: MutableList<User> = ArrayList()
 
         val db = this.readableDatabase
@@ -144,9 +144,9 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         return eventList
     }
 
-    fun deleteEvent(username: String, date: String, time: String) {
+    fun deleteEvent(username: String, date: String, time: String, title: String) {
         val db = this.writableDatabase
-        db.delete(TABLE_NAME_EVENTS, "username=? AND data=? AND time=?", arrayOf(username, date, time))
+        db.delete(TABLE_NAME_EVENTS, "username=? AND data=? AND time=? AND title=?", arrayOf(username, date, time, title))
         db.close()
     }
 

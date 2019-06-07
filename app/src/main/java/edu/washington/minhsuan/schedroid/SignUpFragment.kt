@@ -66,7 +66,7 @@ class SignUpFragment : Fragment() {
     }
 
     private fun readAll(db: DatabaseHelper) {
-        var dataUsers = db.readData()
+        var dataUsers = db.readUsers()
         var result = ""
         for (i in 0 until (dataUsers.size - 1)) {
             val user = dataUsers.get(i)

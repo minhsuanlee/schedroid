@@ -15,7 +15,7 @@ class Event {
     constructor()
 
     constructor(username: String, title: String, date: String, time: String, descript: String, longitude: Float,
-                latitude: Float,daily: Int) {
+                latitude: Float, daily: Int) {
         this.username = username
         this.title = title
         this.date = date
