@@ -3,8 +3,9 @@ package edu.washington.minhsuan.schedroid
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
+//CalendarFragment.ViewDay, OnedayFragment.AddEvent, CreateNewEventFragment.DoneCreate
 
-class MultiActivity : AppCompatActivity() , CalendarFragment.ViewDay, OnedayFragment.AddEvent, OnedayFragment.DeleteEvent, CreateNewEventFragment.DoneCreate, DeleteOneEventFragment.DoneDelete{
+class MultiActivity : AppCompatActivity() {
     private val fragmentManager = supportFragmentManager
 
     var userM = ""
@@ -25,14 +26,10 @@ class MultiActivity : AppCompatActivity() , CalendarFragment.ViewDay, OnedayFrag
     }
     override fun AddEvent() {
         val ft = fragmentManager.beginTransaction()
-        ft.replace(R.id.frameLayout, CreateNewEventFragment.newInstance(userM))
+        ft.replace(R.id.frameLayout, CreateNewEventFragment.newInstance(userM,day))
         ft.commit()
     }
-    override fun DeleteEvent() {
-        val ft = fragmentManager.beginTransaction()
-        ft.replace(R.id.frameLayout, DeleteOneEventFragment.newInstance(userM, day))
-        ft.commit()
-    }
+
     override fun DoneCreate() {
         ViewDay()
     }

@@ -6,23 +6,13 @@
                                              android:layout_height="match_parent">
 
     <Button
-            android:text="DELETE AN EVENT"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btn_deleteEvent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toBottomOf="@+id/txt_title"
-            android:layout_marginBottom="30dp"
-            app:layout_constraintVertical_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp" app:layout_constraintEnd_toStartOf="@+id/btn_addNew"/>
-    <Button
             android:text="Add New Event"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btn_addNew"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toBottomOf="@+id/txt_title"
-            android:layout_marginEnd="13dp" android:layout_marginRight="13dp" android:layout_marginBottom="30dp"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toEndOf="@+id/btn_deleteEvent"/>
+            android:layout_marginEnd="148dp" android:layout_marginRight="148dp" android:layout_marginBottom="30dp"
+            app:layout_constraintEnd_toEndOf="parent"/>
     <TextView
             android:layout_width="0dp"
             android:layout_height="0dp"

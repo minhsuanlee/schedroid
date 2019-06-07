@@ -13,7 +13,6 @@ class OnedayFragment:Fragment() {
     var user : String? = null
     var day : String? = null
     private var listener: AddEvent? = null
-    private var listener1: DeleteEvent? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -32,10 +31,10 @@ class OnedayFragment:Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val title = view.findViewById<TextView>(R.id.txt_title)
         val createBtn = view.findViewById<Button>(R.id.btn_addNew)
-        val deleteBtn = view.findViewById<Button>(R.id.btn_deleteEvent)
         val list = view.findViewById<ListView>(R.id.display_oneday_list)
 
         //TODO: get events display
+        //TODO:  ---- delete (deleteEvent(username date time title))
         // title time location description daily(y/n
         var sample = arrayOf<String>()
         val sample1 = "title" + "\ntime" + "\nlocation" + "\ndescription" + "\ndaily"
@@ -52,32 +51,21 @@ class OnedayFragment:Fragment() {
         createBtn.setOnClickListener{
             listener?.AddEvent()
         }
-        deleteBtn.setOnClickListener {
-            listener1?.DeleteEvent()
-        }
-
     }
 
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         if (context is AddEvent) {
             listener = context
-        } else if (context is DeleteEvent) {
-            listener1 = context
         } else throw RuntimeException("$context must implement ...")
     }
 
     override fun onDetach() {
         super.onDetach()
         listener = null
-        listener1 = null
     }
     interface AddEvent {
         fun AddEvent()
-    }
-
-    interface DeleteEvent {
-        fun DeleteEvent()
     }
 
     companion object {

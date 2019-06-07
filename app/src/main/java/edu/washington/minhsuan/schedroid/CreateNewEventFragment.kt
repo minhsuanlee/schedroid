@@ -12,13 +12,16 @@ import android.widget.EditText
 
 class CreateNewEventFragment : Fragment() {
     private var listener: DoneCreate? = null
+    val db = DatabaseHelper(applicationContext)
     var user : String? = null
+    var day : String? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             user = it.getString("user")
+            day = it.getString("day")
         }
     }
 
@@ -33,13 +36,22 @@ class CreateNewEventFragment : Fragment() {
         val inputDescription = view.findViewById<EditText>(R.id.edit_description)
         val inputDaily = view.findViewById<EditText>(R.id.edit_Y_or_N)
         val btn_ok = view.findViewById<Button>(R.id.btn_ok)
+        var daily = 0
+        if (inputDaily.text.toString() == "Y" || inputDaily.text.toString() ==  "y") {
+            daily = 1
+        }
 
         val btn_map = view.findViewById<Button>(R.id.btn_open_map)
+
+        val eventObject = Event(user, inputTitle, day, inputTime, inputDescription, (long), (lat), daily)
+
         // TODO: open map
 
 
         btn_ok.setOnClickListener {
             //TODO: add the new event to the database
+
+            db.insertEvent(eventObject)
             listener?.DoneCreate()
         }
     }
@@ -61,8 +73,11 @@ class CreateNewEventFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(userName: String) = CreateNewEventFragment().apply {
-            arguments = Bundle().apply { putString("user", userName) }
+        fun newInstance(userName: String, day: String) = CreateNewEventFragment().apply {
+            arguments = Bundle().apply {
+                putString("user", userName)
+                putString("day", day)
+            }
         }
     }
 }
