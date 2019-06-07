@@ -26,6 +26,12 @@ class MultiActivity : AppCompatActivity() {
                 Toast.makeText(this@MultiActivity, "Welcome Back ${db.getName(username)}!",
                     Toast.LENGTH_LONG).show()
                 // Calendar View Fragment
+                // Temp to one day fregment (need to be replaced)
+                val onedayFragment = OnedayFragment.newInstance(username, "06-06-2019")
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.container, onedayFragment, "ONE_DAY_FRAGMENT")
+                    .addToBackStack(null)
+                    .commit()
             } else {
                 val signUpFragment = SignUpFragment.newInstance()
                 supportFragmentManager.beginTransaction()

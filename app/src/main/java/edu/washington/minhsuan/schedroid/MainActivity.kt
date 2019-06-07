@@ -15,8 +15,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        //applicationContext.deleteDatabase("ScheDB")
         val db = DatabaseHelper(applicationContext)
+
+        readAll(db)
 
         val usernameE = findViewById<EditText>(R.id.etxtUsername)
         val passwordE = findViewById<EditText>(R.id.etxtPassword)
@@ -66,5 +68,23 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this@MainActivity, MultiActivity::class.java)
         intent.putExtra("Type", "Signup")
         startActivity(intent)
+    }
+
+    private fun readAll(db: DatabaseHelper) {
+        var dataUsers = db.readUsers()
+        var result = ""
+        for (i in 0 until (dataUsers.size)) {
+            val user = dataUsers[i]
+            result = "$result $user\n"
+        }
+        Toast.makeText(this@MainActivity, "$result", Toast.LENGTH_SHORT).show()
+
+        var dataEvents = db.readEvents()
+        var resultEvents = ""
+        for (i in 0 until (dataEvents.size)) {
+            val event = dataEvents[i]
+            resultEvents = "$resultEvents $event\n"
+        }
+        Toast.makeText(this@MainActivity, "$resultEvents", Toast.LENGTH_SHORT).show()
     }
 }

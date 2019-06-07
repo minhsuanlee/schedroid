@@ -38,11 +38,10 @@ class SignUpFragment : Fragment() {
             val password = passwordE.text.toString()
 
             var error = ""
-            if (full_name.isEmpty()) { error = "$error Please enter your full name;\n"}
-            if (phone_num.isEmpty()) { error = "$error Please enter your phone number;\n"}
-            if (username.isEmpty()) { error = "$error Please enter your username;\n"}
-            if (password.isEmpty()) { error = "$error Please enter your password;\n"}
-
+            if (full_name.isEmpty()) { error = "$error Please enter your full name;\n" }
+            if (phone_num.isEmpty()) { error = "$error Please enter your phone number;\n" }
+            if (username.isEmpty()) { error = "$error Please enter your username;\n" }
+            if (password.isEmpty()) { error = "$error Please enter your password;\n" }
             if (error.isNotEmpty()) {
                 Toast.makeText(activity, error, Toast.LENGTH_SHORT).show()
             } else {
@@ -57,29 +56,16 @@ class SignUpFragment : Fragment() {
                     Toast.makeText(activity, "Nice to meet you! $full_name", Toast.LENGTH_SHORT).show()
                     // Calendar View Fragment
 
-                    readAll(db)
+                    val fragmentManager = fragmentManager
+                    val onedayFragment = OnedayFragment.newInstance(username, "06-06-2019")
+                    fragmentManager!!.beginTransaction()
+                        .replace(R.id.container, onedayFragment, "ONE_DAY_FRAGMENT")
+                        .addToBackStack(null)
+                        .commit()
                 }
             }
         }
 
         return rootView
-    }
-
-    private fun readAll(db: DatabaseHelper) {
-        var dataUsers = db.readUsers()
-        var result = ""
-        for (i in 0 until (dataUsers.size - 1)) {
-            val user = dataUsers.get(i)
-            result = "$result $user\n"
-        }
-        Toast.makeText(activity, "$result", Toast.LENGTH_SHORT).show()
-
-        var dataEvents = db.readEvents()
-        var resultEvents = ""
-        for (i in 0 until (dataEvents.size - 1)) {
-            val event = dataEvents.get(i)
-            resultEvents = "$resultEvents $event\n"
-        }
-        Toast.makeText(activity, "$resultEvents", Toast.LENGTH_SHORT).show()
     }
 }

@@ -1,82 +1,107 @@
 package edu.washington.minhsuan.schedroid
 
-import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+import java.io.Serializable
 
 
 class CreateNewEventFragment : Fragment() {
-    private var listener: DoneCreate? = null
-    val db = DatabaseHelper(applicationContext)
-    var user : String? = null
-    var day : String? = null
-
+    val TAG = "CreateNewEventFragment"
+    var username : String? = null
+    var date : String? = null
+    var isupdate = false
+    var event : Event? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            user = it.getString("user")
-            day = it.getString("day")
+            username = it.getString("user")
+            date = it.getString("day")
+            isupdate = it.getBoolean("isUpdate")
+            event = if (it.getSerializable("Event") is String) { null } else { it.getSerializable("Event") as Event }
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.create_new_event, container, false)
-    }
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val rootView = inflater.inflate(R.layout.create_new_event, container, false)
+        val db = DatabaseHelper(context!!)
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val inputTitle = view.findViewById<EditText>(R.id.edit_title)
-        val inputTime = view.findViewById<EditText>(R.id.edit_time)
-        val inputDescription = view.findViewById<EditText>(R.id.edit_description)
-        val inputDaily = view.findViewById<EditText>(R.id.edit_Y_or_N)
-        val btn_ok = view.findViewById<Button>(R.id.btn_ok)
-        var daily = 0
-        if (inputDaily.text.toString() == "Y" || inputDaily.text.toString() ==  "y") {
-            daily = 1
+        val title = rootView.findViewById<TextView>(R.id.txt_create_title)
+        var inputTitle = rootView.findViewById<EditText>(R.id.edit_title)
+        var inputTime = rootView.findViewById<EditText>(R.id.edit_time)
+        var inputDescription = rootView.findViewById<EditText>(R.id.edit_description)
+        var inputDaily = rootView.findViewById<EditText>(R.id.edit_Y_or_N)
+        val btn_map = rootView.findViewById<Button>(R.id.btn_open_map)
+        var btnOk = rootView.findViewById<Button>(R.id.btn_ok)
+
+        if (isupdate) {
+            title.text = "Update Current Event:"
+            btnOk.text = "Update!"
+            inputTitle.setText(event!!.title)
+            inputTime.setText(event!!.time)
+            inputDescription.setText(event!!.descript)
+            val daily = if (event!!.daily == 1) { "Y" } else { "N" }
+            inputDaily.setText(daily)
         }
-
-        val btn_map = view.findViewById<Button>(R.id.btn_open_map)
-
-        val eventObject = Event(user, inputTitle, day, inputTime, inputDescription, (long), (lat), daily)
 
         // TODO: open map
 
+        btnOk.setOnClickListener {
+            if (isupdate) {
+                db.deleteEvent(event!!.username, event!!.date, event!!.time)
+            }
+            inputTitle = rootView.findViewById(R.id.edit_title)
+            inputTime = rootView.findViewById(R.id.edit_time)
+            inputDescription = rootView.findViewById(R.id.edit_description)
+            inputDaily = rootView.findViewById(R.id.edit_Y_or_N)
+            var daily = if (inputDaily.text.toString().toLowerCase() == "y") { 1 } else { 0 }
 
-        btn_ok.setOnClickListener {
-            //TODO: add the new event to the database
+            var error = ""
+            if (inputTitle.text.isEmpty()) { error = "$error Please enter an event title;\n"}
+            if (inputTime.text.isEmpty()) { error = "$error Please enter the time of the event;\n"}
+            if (inputDescription.text.isEmpty()) { error = "$error Please enter a description;\n" }
+            if (inputDaily.text.isEmpty()) { error = "$error Please enter Y/N for Daily;\n" }
 
-            db.insertEvent(eventObject)
-            listener?.DoneCreate()
+            if (error.isNotEmpty()) {
+                Toast.makeText(activity, error, Toast.LENGTH_LONG).show()
+            } else {
+                val eventObject = Event(username!!, inputTitle.text.toString(), date!!, inputTime.text.toString(),
+                    inputDescription.text.toString(), 11.0.toFloat(), 12.0.toFloat(), daily)
+                db.insertEvent(eventObject)
+                val message = if (isupdate) { "Event Updated!" } else { "Event created!" }
+                Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+
+                val fragmentManager = fragmentManager
+                val onedayFragment = OnedayFragment.newInstance(username!!, date!!)
+                fragmentManager!!.beginTransaction()
+                    .replace(R.id.container, onedayFragment, "ONE_DAY_FRAGMENT")
+                    .addToBackStack(null)
+                    .commit()
+            }
         }
-    }
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        if (context is DoneCreate) {
-            listener = context
-        } else throw RuntimeException("$context must implement ...")
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
-    }
-
-    interface DoneCreate {
-        fun DoneCreate()
+        return rootView
     }
 
     companion object {
-        fun newInstance(userName: String, day: String) = CreateNewEventFragment().apply {
-            arguments = Bundle().apply {
-                putString("user", userName)
-                putString("day", day)
+        fun newInstance(userName: String, day: String, update: Boolean, event: Serializable) =
+            CreateNewEventFragment().apply {
+                arguments = Bundle().apply {
+                    putString("user", userName)
+                    putString("day", day)
+                    putBoolean("isUpdate", update)
+                    putSerializable("Event", event)
             }
         }
     }

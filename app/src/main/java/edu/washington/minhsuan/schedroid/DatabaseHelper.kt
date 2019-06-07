@@ -10,25 +10,24 @@ import android.util.Log
 
 class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     val TAG = "DatabaseHelper"
+    private val createUserTable = ("CREATE TABLE IF NOT EXISTS $TABLE_NAME_USERS (" +
+            "$COL_NAME TEXT," +
+            "$COL_PHONE TEXT," +
+            "$COL_USERNAME TEXT PRIMARY KEY," +
+            "$COL_PASSWORD TEXT);")
+    private val createEventsTable = ("CREATE TABLE IF NOT EXISTS $TABLE_NAME_EVENTS (" +
+            "$COL_USERNAME TEXT REFERENCES $TABLE_NAME_USERS ($COL_USERNAME)," +
+            "$COL_TITLE TEXT," +
+            "$COL_DATE TEXT," +
+            "$COL_TIME TEXT," +
+            "$COL_DES TEXT," +
+            "$COL_LONG FLOAT," +
+            "$COL_LAT FLOAT," +
+            "$COL_DAILY TEXT," +
+            "PRIMARY KEY ($COL_USERNAME, $COL_DATE, $COL_TIME));")
 
     override fun onCreate(db: SQLiteDatabase) {
-        val createUserTable = ("CREATE TABLE $TABLE_NAME_USERS (" +
-                "$COL_NAME TEXT," +
-                "$COL_PHONE TEXT," +
-                "$COL_USERNAME TEXT PRIMARY KEY," +
-                "$COL_PASSWORD TEXT);")
         db.execSQL(createUserTable)
-
-        val createEventsTable = ("CREATE TABLE $TABLE_NAME_EVENTS (" +
-                "$COL_USERNAME TEXT REFERENCES $TABLE_NAME_USERS($COL_USERNAME)," +
-                "$COL_TITLE TEXT," +
-                "$COL_DATE TEXT," +
-                "$COL_TIME TEXT," +
-                "$COL_DES TEXT," +
-                "$COL_LONG FLOAT," +
-                "$COL_LAT FLOAT," +
-                "$COL_DAILY TEXT," +
-                "PRIMARY KEY ($COL_USERNAME, $COL_DATE);")
         db.execSQL(createEventsTable)
     }
 
@@ -122,7 +121,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         val eventList: MutableList<Event> = ArrayList()
 
         val db = this.readableDatabase
-        val result = db.query(TABLE_NAME_USERS, arrayOf(COL_USERNAME, COL_TITLE, COL_DATE, COL_TIME, COL_DES,
+        val result = db.query(TABLE_NAME_EVENTS, arrayOf(COL_USERNAME, COL_TITLE, COL_DATE, COL_TIME, COL_DES,
             COL_LONG, COL_LAT, COL_DAILY), "username=? AND date=?", arrayOf(username, date),null,
             null, COL_TIME)
         if (result.moveToFirst()) {
@@ -144,9 +143,9 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         return eventList
     }
 
-    fun deleteEvent(username: String, date: String, time: String, title: String) {
+    fun deleteEvent(username: String, date: String, time: String) {
         val db = this.writableDatabase
-        db.delete(TABLE_NAME_EVENTS, "username=? AND data=? AND time=? AND title=?", arrayOf(username, date, time, title))
+        db.delete(TABLE_NAME_EVENTS, "username=? AND date=? AND time=?", arrayOf(username, date, time))
         db.close()
     }
 
