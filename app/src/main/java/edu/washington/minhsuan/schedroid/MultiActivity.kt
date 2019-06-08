@@ -23,6 +23,7 @@ class MultiActivity : AppCompatActivity() {
             type = this.getString("Type")
             if (type == "Login") {
                 username = this.getString("Username")
+                App.instance.repo.currentUsername = username
                 Toast.makeText(this@MultiActivity, "Welcome Back ${db.getName(username)}!",
                     Toast.LENGTH_LONG).show()
 
