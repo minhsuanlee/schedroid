@@ -1,5 +1,6 @@
 package edu.washington.minhsuan.schedroid
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
@@ -55,12 +56,16 @@ class CreateNewEventFragment : Fragment() {
             inputDaily.setText(daily)
         }
 
-        // TODO: open map
+        btn_map.setOnClickListener{
+            val openMap = Intent(activity, MapsActivity::class.java)
+            startActivity(openMap)
+        }
 
         btnOk.setOnClickListener {
             if (isupdate) {
                 db.deleteEvent(event!!.username, event!!.date, event!!.time)
             }
+
             inputTitle = rootView.findViewById(R.id.edit_title)
             inputTime = rootView.findViewById(R.id.edit_time)
             inputDescription = rootView.findViewById(R.id.edit_description)
@@ -72,12 +77,14 @@ class CreateNewEventFragment : Fragment() {
             if (inputTime.text.isEmpty()) { error = "$error Please enter the time of the event;\n"}
             if (inputDescription.text.isEmpty()) { error = "$error Please enter a description;\n" }
             if (inputDaily.text.isEmpty()) { error = "$error Please enter Y/N for Daily;\n" }
+            if (App.instance.repo.currentLoc == null) {error = "$error Please assign a location;\n"}
 
             if (error.isNotEmpty()) {
                 Toast.makeText(activity, error, Toast.LENGTH_LONG).show()
             } else {
                 val eventObject = Event(username!!, inputTitle.text.toString(), date!!, inputTime.text.toString(),
-                    inputDescription.text.toString(), 11.0.toFloat(), 12.0.toFloat(), daily)
+                    inputDescription.text.toString(), App.instance.repo.currentLoc!!.longitude.toFloat(),
+                    App.instance.repo.currentLoc!!.latitude.toFloat(), daily)
                 db.insertEvent(eventObject)
                 val message = if (isupdate) { "Event Updated!" } else { "Event created!" }
                 Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
@@ -89,6 +96,7 @@ class CreateNewEventFragment : Fragment() {
                     .addToBackStack(null)
                     .commit()
             }
+            App.instance.repo.currentLoc = null
         }
 
         return rootView

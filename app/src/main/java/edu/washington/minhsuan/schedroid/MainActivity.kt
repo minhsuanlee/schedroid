@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         //applicationContext.deleteDatabase("ScheDB")
         val db = DatabaseHelper(applicationContext)
 
-        readAll(db)
+        //readAll(db)
 
         val usernameE = findViewById<EditText>(R.id.etxtUsername)
         val passwordE = findViewById<EditText>(R.id.etxtPassword)
@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun logInIntent(username: String, password: String) {
+        App.instance.repo.currentName = username
         val intent = Intent(this@MainActivity, MultiActivity::class.java)
         intent.putExtra("Type", "Login")
         intent.putExtra("Username", username)

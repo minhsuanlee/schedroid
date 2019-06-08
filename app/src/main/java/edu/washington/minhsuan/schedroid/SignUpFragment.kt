@@ -52,7 +52,7 @@ class SignUpFragment : Fragment() {
                 } else {
                     val user = User(full_name, phone_num, username, password)
                     db.insertData(user)
-
+                    App.instance.repo.currentName = username
                     Toast.makeText(activity, "Nice to meet you! $full_name", Toast.LENGTH_SHORT).show()
                     // Calendar View Fragment
 

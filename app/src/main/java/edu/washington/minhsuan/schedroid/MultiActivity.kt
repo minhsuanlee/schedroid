@@ -2,7 +2,9 @@ package edu.washington.minhsuan.schedroid
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import java.io.Serializable
 
 class MultiActivity : AppCompatActivity() {
 
@@ -11,8 +13,6 @@ class MultiActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_multi)
-
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         val db = DatabaseHelper(applicationContext)
 
@@ -25,11 +25,11 @@ class MultiActivity : AppCompatActivity() {
                 username = this.getString("Username")
                 Toast.makeText(this@MultiActivity, "Welcome Back ${db.getName(username)}!",
                     Toast.LENGTH_LONG).show()
+
                 // Calendar View Fragment
-                // Temp to one day fregment (need to be replaced)
-                val onedayFragment = OnedayFragment.newInstance(username, "06-06-2019")
+                val calendarFragment = CalendarFragment()
                 supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, onedayFragment, "ONE_DAY_FRAGMENT")
+                    .replace(R.id.container, calendarFragment)
                     .addToBackStack(null)
                     .commit()
             } else {
