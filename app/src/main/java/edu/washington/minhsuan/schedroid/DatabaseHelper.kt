@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.database.DatabaseUtils
 import android.util.Log
+import com.google.android.gms.maps.model.LatLng
 
 
 class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -141,6 +142,17 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         result.close()
         db.close()
         return eventList
+    }
+
+    fun checkAlarm(date: String, time: String): LatLng? {
+        val username = App.instance.repo.currentUsername
+        val eventList = readEvents(username!!, date)
+        for (event in eventList) {
+            if (event.time == time) {
+                return LatLng(event.latitude.toDouble(), event.longitude.toDouble())
+            }
+        }
+        return null
     }
 
     fun deleteEvent(username: String, date: String, time: String) {
