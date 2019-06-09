@@ -1,8 +1,14 @@
 package edu.washington.minhsuan.schedroid
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.content.ContextCompat
+import android.support.v4.content.ContextCompat.getSystemService
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +17,10 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import java.io.Serializable
 
 
@@ -54,18 +64,18 @@ class CreateNewEventFragment : Fragment() {
             inputDescription.setText(event!!.descript)
             val daily = if (event!!.daily == 1) { "Y" } else { "N" }
             inputDaily.setText(daily)
+
+            val latlng = LatLng(event!!.latitude.toDouble(), event!!.longitude.toDouble())
+            App.instance.repo.currentLoc = latlng
         }
 
         btn_map.setOnClickListener{
             val openMap = Intent(activity, MapsActivity::class.java)
+            openMap.putExtra("Update", isupdate)
             startActivity(openMap)
         }
 
         btnOk.setOnClickListener {
-            if (isupdate) {
-                db.deleteEvent(event!!.username, event!!.date, event!!.time)
-            }
-
             inputTitle = rootView.findViewById(R.id.edit_title)
             inputTime = rootView.findViewById(R.id.edit_time)
             inputDescription = rootView.findViewById(R.id.edit_description)
@@ -82,6 +92,9 @@ class CreateNewEventFragment : Fragment() {
             if (error.isNotEmpty()) {
                 Toast.makeText(activity, error, Toast.LENGTH_LONG).show()
             } else {
+                if (isupdate) {
+                    db.deleteEvent(event!!.username, event!!.date, event!!.time)
+                }
                 val eventObject = Event(username!!, inputTitle.text.toString(), date!!, inputTime.text.toString(),
                     inputDescription.text.toString(), App.instance.repo.currentLoc!!.longitude.toFloat(),
                     App.instance.repo.currentLoc!!.latitude.toFloat(), daily)

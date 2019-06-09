@@ -35,6 +35,7 @@ class OnedayFragment: Fragment() {
         val title = rootView.findViewById<TextView>(R.id.txt_title)
         val createBtn = rootView.findViewById<Button>(R.id.btn_addNew)
         val list = rootView.findViewById<ListView>(R.id.display_oneday_list)
+        val returnBtn = rootView.findViewById<Button>(R.id.btnreturnCalendar)
 
         title.text = "Schedule for $date"
 
@@ -85,6 +86,14 @@ class OnedayFragment: Fragment() {
                 false, "")
             fragmentManager!!.beginTransaction()
                 .replace(R.id.container, createEventFragment, "CREATE_EVENT_FRAGMENT")
+                .addToBackStack(null)
+                .commit()
+        }
+
+        returnBtn.setOnClickListener{
+            val calendarFragment = CalendarFragment()
+            fragmentManager!!.beginTransaction()
+                .replace(R.id.container, calendarFragment)
                 .addToBackStack(null)
                 .commit()
         }

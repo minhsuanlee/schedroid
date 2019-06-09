@@ -2,16 +2,12 @@
     <string name="app_name">Schedroid</string>
     <string name="schedroid">Schedroid</string>
     <string name="login">Login</string>
-    <string name="sign_up">
-        <u>Sign Up</u>
-    </string>
+    <string name="sign_up"><u>Sign Up</u></string>
     <string name="password">Password:</string>
     <string name="username">Username:</string>
     <string name="please_enter_your_username">Please enter your username</string>
     <string name="please_enter_your_password">Please enter your password</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="please_enter_your_full_name">Please enter your full name</string>
     <string name="please_enter_your_phone_number">Please enter your phone number</string>
     <string name="add_new_event">Add New Event</string>
@@ -29,4 +25,6 @@
     <string name="is_it_a_daily_activity">Is it a daily activity?</string>
     <string name="ok">OK!</string>
     <string name="create">Create!</string>
+    <string name="return_to_calendar"><u>Return to Calendar</u></string>
+    <string name="logout">Logout</string>
 </resources>

@@ -34,6 +34,23 @@
         <Button
                 android:text="@string/add_new_event"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/btn_addNew"/>
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_addNew"/>
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="bottom|right|end">
+            <Button
+                    android:text="@string/return_to_calendar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnreturnCalendar"
+                    android:background="@null"
+                    android:textSize="15sp"/>
+            <Space
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

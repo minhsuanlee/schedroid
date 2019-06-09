@@ -31,10 +31,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLon
     private lateinit var mMap: GoogleMap
 
     val TAG = "MapsActivity"
+    var isUpdate = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
+
+        intent.extras.apply {
+            isUpdate = this.getBoolean("Update")
+        }
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -53,12 +58,16 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLon
             } catch (e: IOException) {
                 e.printStackTrace()
             }
-            mMap.clear()
-            val address = addressList[0]
-            val latLng = LatLng(address.latitude, address.longitude)
-            mMap.addMarker(MarkerOptions().position(latLng).title("Marker"))
-            mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng))
-            App.instance.repo.currentLoc = latLng
+            if (addressList.isNotEmpty()) {
+                val address = addressList[0]
+                val latLng = LatLng(address.latitude, address.longitude)
+                mMap.clear()
+                mMap.addMarker(MarkerOptions().position(latLng).title("Marker"))
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng))
+                App.instance.repo.currentLoc = latLng
+            } else {
+                Toast.makeText(applicationContext, "You might have entered invalid location", Toast.LENGTH_SHORT)
+            }
         }
     }
 
@@ -68,6 +77,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLon
         mMap.setOnPoiClickListener(this)
         mMap.setOnMapLongClickListener(this)
         App.instance.repo.mMap = googleMap
+        if (isUpdate) {
+            val latlng = App.instance.repo.currentLoc
+            if (mMap != null) {
+                val marker = mMap!!.addMarker(MarkerOptions().position(latlng!!).title("Selected Location"))
+                mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15f))
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(latlng))
+            }
+        }
         if (ContextCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted
@@ -89,14 +106,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLon
             mMap.isMyLocationEnabled = true
         }
         // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
         val lm = getSystemService(LOCATION_SERVICE) as LocationManager
-        val location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-        val longitude = location.longitude
-        val latitude = location.latitude
-        val mLocation = LatLng(latitude, longitude)
-        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(mLocation, 10f))
-
 
         try {
             // Request location updates
@@ -128,7 +138,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLon
         builder.apply {
             setTitle("Selected Location")
             setMessage("Set this as the desired destination?")
-            setPositiveButton("Yes") {dialog, id ->
+            setPositiveButton("Yes") {_, _ ->
                 App.instance.repo.currentLoc=p0
                 Toast.makeText(this@MapsActivity, "Location selected", Toast.LENGTH_SHORT).show()
             }

@@ -1,5 +1,6 @@
 package edu.washington.minhsuan.schedroid
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -21,6 +22,12 @@ class CalendarFragment: Fragment() {
                 .addToBackStack(null)
                 .commit()
             //Toast.makeText(context, "" + dayOfMonth, Toast.LENGTH_SHORT).show()
+        }
+
+        val logoutBtn = rootview.findViewById<Button>(R.id.btnLogout)
+        logoutBtn.setOnClickListener {
+            val intent = Intent(context, MainActivity::class.java)
+            startActivity(intent)
         }
         return rootview
     }

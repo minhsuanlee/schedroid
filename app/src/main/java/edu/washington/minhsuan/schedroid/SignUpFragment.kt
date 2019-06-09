@@ -55,11 +55,10 @@ class SignUpFragment : Fragment() {
                     App.instance.repo.currentName = username
                     Toast.makeText(activity, "Nice to meet you! $full_name", Toast.LENGTH_SHORT).show()
                     // Calendar View Fragment
-
                     val fragmentManager = fragmentManager
-                    val onedayFragment = OnedayFragment.newInstance(username, "06-06-2019")
+                    val calendarFragment = CalendarFragment()
                     fragmentManager!!.beginTransaction()
-                        .replace(R.id.container, onedayFragment, "ONE_DAY_FRAGMENT")
+                        .replace(R.id.container, calendarFragment)
                         .addToBackStack(null)
                         .commit()
                 }
