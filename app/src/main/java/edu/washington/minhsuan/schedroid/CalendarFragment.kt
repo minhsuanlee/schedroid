@@ -15,6 +15,7 @@ class CalendarFragment: Fragment() {
         calendarView.setOnDateChangeListener { view:View, year:Int, month:Int, dayOfMonth:Int ->
             val date = String.format("%02d", month+1) + "-" + String.format("%02d", dayOfMonth) +
                     "-" + year.toString()
+            App.instance.repo.currentDate = date
             val onedayFragment = OnedayFragment.newInstance(App.instance.repo.currentName!!, date)
             fragmentManager!!.beginTransaction()
                 .replace(R.id.container, onedayFragment, "ONE_DAY_FRAGMENT")

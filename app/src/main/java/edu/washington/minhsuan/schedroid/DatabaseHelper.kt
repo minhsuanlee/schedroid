@@ -144,14 +144,15 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         return eventList
     }
 
-    fun checkAlarm(date: String, time: String): LatLng? {
-        val username = App.instance.repo.currentUsername
+    fun checkAlarm(date: String?, time: String): LatLng? {
+        if (date != null) {
+        val username = App.instance.repo.currentName
         val eventList = readEvents(username!!, date)
         for (event in eventList) {
             if (event.time == time) {
                 return LatLng(event.latitude.toDouble(), event.longitude.toDouble())
             }
-        }
+        }}
         return null
     }
 

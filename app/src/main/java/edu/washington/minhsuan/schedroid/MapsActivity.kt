@@ -38,6 +38,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLon
 
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+        val lm = getSystemService(LOCATION_SERVICE) as LocationManager
+//        val location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+//        val longitude = location.longitude
+//        val latitude = location.latitude
+//        val mLocation = LatLng(latitude, longitude)
+//        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(mLocation, 10f))
+
+
+        try {
+            // Request location updates
+         //   lm!!.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f,
+                //App.instance.repo.locationListener)
+        } catch(ex: SecurityException) {
+            Log.v(TAG, "Security Exception, no location available")
+        }
     }
 
     fun onMapSearch(view: View) {
@@ -95,13 +110,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLon
         val longitude = location.longitude
         val latitude = location.latitude
         val mLocation = LatLng(latitude, longitude)
-        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(mLocation, 10f))
+        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(mLocation, 15f))
 
 
         try {
             // Request location updates
-            lm?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f,
-                App.instance.repo.locationListener)
+           // lm?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f,
+                //App.instance.repo.locationListener)
         } catch(ex: SecurityException) {
             Log.v(TAG, "Security Exception, no location available")
         }
