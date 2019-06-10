@@ -131,8 +131,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_ok"/>
-        <Space
+        <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"/>
+                android:layout_height="wrap_content"
+                android:gravity="bottom|end">
+            <Button
+                    android:text="@string/go_back"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnGoBack"
+                    android:background="@null"
+                    android:textSize="15sp"/>
+            <Space
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

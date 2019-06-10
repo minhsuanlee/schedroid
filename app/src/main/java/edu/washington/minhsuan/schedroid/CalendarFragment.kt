@@ -16,6 +16,7 @@ class CalendarFragment: Fragment() {
         calendarView.setOnDateChangeListener { view:View, year:Int, month:Int, dayOfMonth:Int ->
             val date = String.format("%02d", month+1) + "-" + String.format("%02d", dayOfMonth) +
                     "-" + year.toString()
+            App.instance.repo.currentDate = date
             val onedayFragment = OnedayFragment.newInstance(App.instance.repo.currentName!!, date)
             fragmentManager!!.beginTransaction()
                 .replace(R.id.container, onedayFragment, "ONE_DAY_FRAGMENT")
@@ -27,6 +28,7 @@ class CalendarFragment: Fragment() {
         val logoutBtn = rootview.findViewById<Button>(R.id.btnLogout)
         logoutBtn.setOnClickListener {
             val intent = Intent(context, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
 

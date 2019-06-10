@@ -144,26 +144,42 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         return eventList
     }
 
-    fun checkAlarm(date: String, time: String): LatLng? {
-        val username = App.instance.repo.currentUsername
+    fun readEvent(username: String, date: String, time: String): Event {
+        val db = this.readableDatabase
+        val result = db.query(TABLE_NAME_EVENTS, arrayOf(COL_USERNAME, COL_TITLE, COL_DATE, COL_TIME, COL_DES,
+            COL_LONG, COL_LAT, COL_DAILY), "username=? AND date=? AND time=?", arrayOf(username, date, time),
+            null, null, COL_TIME)
+        var event = Event()
+        if (result.moveToFirst()) {
+            event.username = result.getString(result.getColumnIndex(COL_USERNAME))
+            event.title = result.getString(result.getColumnIndex(COL_TITLE))
+            event.date = result.getString(result.getColumnIndex(COL_DATE))
+            event.time = result.getString(result.getColumnIndex(COL_TIME))
+            event.descript = result.getString(result.getColumnIndex(COL_DES))
+            event.longitude = result.getFloat(result.getColumnIndex(COL_LONG))
+            event.latitude = result.getFloat(result.getColumnIndex(COL_LAT))
+            event.daily = result.getInt(result.getColumnIndex(COL_DAILY))
+        }
+        result.close()
+        db.close()
+        return event
+    }
+
+    fun checkAlarm(date: String?, time: String): LatLng? {
+        if (date != null) {
+        val username = App.instance.repo.currentName
         val eventList = readEvents(username!!, date)
         for (event in eventList) {
             if (event.time == time) {
                 return LatLng(event.latitude.toDouble(), event.longitude.toDouble())
             }
-        }
+        }}
         return null
     }
 
     fun deleteEvent(username: String, date: String, time: String) {
         val db = this.writableDatabase
         db.delete(TABLE_NAME_EVENTS, "username=? AND date=? AND time=?", arrayOf(username, date, time))
-        db.close()
-    }
-
-    fun deleteAll(table: String) {
-        val db = this.writableDatabase
-        db.execSQL("DELETE FROM $table;")
         db.close()
     }
 
@@ -198,6 +214,26 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         result.close()
         db.close()
         return name
+    }
+
+    fun isTimeConflict(username: String, date: String, time: String): Boolean {
+        val db = this.readableDatabase
+        val result = db.query(TABLE_NAME_EVENTS, arrayOf(COL_TIME), "username=? AND date=?",
+            arrayOf(username, date),
+            null, null, null)
+        var storedTime = ""
+        if (result.moveToFirst()) {
+            storedTime = result.getString(result.getColumnIndex(COL_TIME))
+        }
+        result.close()
+        db.close()
+        return storedTime == time
+    }
+
+    fun deleteAll(table: String) {
+        val db = this.writableDatabase
+        db.execSQL("DELETE FROM $table;")
+        db.close()
     }
 
     companion object {

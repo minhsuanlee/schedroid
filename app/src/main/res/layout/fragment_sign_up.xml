@@ -20,7 +20,7 @@
                 android:textSize="30sp"/>
         <Space
                 android:layout_width="match_parent"
-                android:layout_height="30dp"/>
+                android:layout_height="25dp"/>
         <TextView
                 android:text="Full Name"
                 android:layout_width="wrap_content"
@@ -106,9 +106,23 @@
         <Button
                 android:text="Create!"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/btnCreate"/>
-        <Space
+                android:layout_height="wrap_content"
+                android:id="@+id/btnCreate"/>
+        <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="25dp"/>
+                android:layout_height="wrap_content"
+                android:gravity="bottom|end">
+            <Button
+                    android:text="@string/log_in"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/btnReturn"
+                    android:background="@null"
+                    android:textSize="15sp"/>
+            <Space
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"/>
+        </LinearLayout>
     </LinearLayout>
 </FrameLayout>

@@ -1,14 +1,8 @@
 package edu.washington.minhsuan.schedroid
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.location.LocationManager
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
-import android.support.v4.content.ContextCompat.getSystemService
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,10 +11,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
 import java.io.Serializable
 
 
@@ -55,6 +46,7 @@ class CreateNewEventFragment : Fragment() {
         var inputDaily = rootView.findViewById<EditText>(R.id.edit_Y_or_N)
         val btn_map = rootView.findViewById<Button>(R.id.btn_open_map)
         var btnOk = rootView.findViewById<Button>(R.id.btn_ok)
+        val btnGoBack = rootView.findViewById<Button>(R.id.btnGoBack)
 
         if (isupdate) {
             title.text = "Update Current Event:"
@@ -64,7 +56,6 @@ class CreateNewEventFragment : Fragment() {
             inputDescription.setText(event!!.descript)
             val daily = if (event!!.daily == 1) { "Y" } else { "N" }
             inputDaily.setText(daily)
-
             val latlng = LatLng(event!!.latitude.toDouble(), event!!.longitude.toDouble())
             App.instance.repo.currentLoc = latlng
         }
@@ -91,6 +82,9 @@ class CreateNewEventFragment : Fragment() {
 
             if (error.isNotEmpty()) {
                 Toast.makeText(activity, error, Toast.LENGTH_LONG).show()
+            } else if (!isupdate && db.isTimeConflict(username!!, date!!, inputTime.text.toString())) {
+                Toast.makeText(activity, "Time entered conflicts with an existing event. " +
+                        "Please enter a different time", Toast.LENGTH_LONG).show()
             } else {
                 if (isupdate) {
                     db.deleteEvent(event!!.username, event!!.date, event!!.time)
@@ -101,6 +95,7 @@ class CreateNewEventFragment : Fragment() {
                 db.insertEvent(eventObject)
                 val message = if (isupdate) { "Event Updated!" } else { "Event created!" }
                 Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
+                App.instance.repo.currentLoc = null
 
                 val fragmentManager = fragmentManager
                 val onedayFragment = OnedayFragment.newInstance(username!!, date!!)
@@ -109,7 +104,11 @@ class CreateNewEventFragment : Fragment() {
                     .addToBackStack(null)
                     .commit()
             }
+        }
+
+        btnGoBack.setOnClickListener {
             App.instance.repo.currentLoc = null
+            fragmentManager!!.popBackStackImmediate()
         }
 
         return rootView

@@ -48,13 +48,6 @@ class MainActivity : AppCompatActivity() {
         signUpBtn.setOnClickListener{
             signUpIntent()
         }
-
-        // To delete later (below)
-        val btnDelete = findViewById<Button>(R.id.btnDelete)
-        btnDelete.setOnClickListener{
-            db.deleteAll("Users")
-        }
-        // To delete later (above)
     }
 
     private fun logInIntent(username: String, password: String) {

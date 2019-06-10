@@ -42,14 +42,14 @@ class OnedayFragment: Fragment() {
         var dataEvents = db.readEvents(username, date)
         var events = arrayListOf<String>()
         for (i in 0 until (dataEvents.size)) {
-            events.add(dataEvents[i].toString())
+            events.add(dataEvents[i].show())
         }
 
         val adapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, events)
         list.adapter = adapter
         list.setOnItemClickListener { parent, view, position, id ->
-            val event = Event(parent.getItemAtPosition(position).toString())
-
+            val time = parent.getItemAtPosition(position).toString().reversed().substring(0, 5).reversed()
+            val event = db.readEvent(username, date, time)
             val builder = AlertDialog.Builder(context!!)
             builder.setTitle("Edit Event")
             builder.setMessage("What would you like to do?")

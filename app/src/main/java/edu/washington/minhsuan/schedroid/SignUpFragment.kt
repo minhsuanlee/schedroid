@@ -1,5 +1,6 @@
 package edu.washington.minhsuan.schedroid
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -30,6 +31,7 @@ class SignUpFragment : Fragment() {
         val usernameE = rootView.findViewById<EditText>(R.id.etxtUsername)
         val passwordE = rootView.findViewById<EditText>(R.id.etxtPassword)
         val createBtn = rootView.findViewById<Button>(R.id.btnCreate)
+        val returnBtn = rootView.findViewById<Button>(R.id.btnReturn)
 
         createBtn.setOnClickListener {
             val full_name = fullNameE.text.toString()
@@ -63,6 +65,11 @@ class SignUpFragment : Fragment() {
                         .commit()
                 }
             }
+        }
+
+        returnBtn.setOnClickListener {
+            val intent = Intent(context, MainActivity::class.java)
+            startActivity(intent)
         }
 
         return rootView
