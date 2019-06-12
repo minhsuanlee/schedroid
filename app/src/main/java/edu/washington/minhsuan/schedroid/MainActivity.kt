@@ -18,8 +18,6 @@ class MainActivity : AppCompatActivity() {
         //applicationContext.deleteDatabase("ScheDB")
         val db = DatabaseHelper(applicationContext)
 
-        //readAll(db)
-
         val usernameE = findViewById<EditText>(R.id.etxtUsername)
         val passwordE = findViewById<EditText>(R.id.etxtPassword)
         val loginBtn = findViewById<Button>(R.id.btnLogin)

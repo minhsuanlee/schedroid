@@ -24,7 +24,6 @@ import android.widget.Toast
 import com.google.android.gms.maps.model.PointOfInterest
 import java.io.IOException
 
-
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLongClickListener ,
     GoogleMap.OnMapClickListener, GoogleMap.OnPoiClickListener {
 
@@ -109,9 +108,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLon
         mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(mLocation, 15f))
 
         try {
-            // Request location updates
-           // lm?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f,
-                //App.instance.repo.locationListener)
         } catch(ex: SecurityException) {
             Log.v(TAG, "Security Exception, no location available")
         }
