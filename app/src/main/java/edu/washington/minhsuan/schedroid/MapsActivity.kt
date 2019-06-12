@@ -24,26 +24,32 @@ import android.widget.Toast
 import com.google.android.gms.maps.model.PointOfInterest
 import java.io.IOException
 
+
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLongClickListener ,
     GoogleMap.OnMapClickListener, GoogleMap.OnPoiClickListener {
 
     private lateinit var mMap: GoogleMap
 
     val TAG = "MapsActivity"
-    var isUpdate = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
 
-        intent.extras.apply {
-            isUpdate = this.getBoolean("Update")
-        }
-
         val mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+        val lm = getSystemService(LOCATION_SERVICE) as LocationManager
+//        val location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+//        val longitude = location.longitude
+//        val latitude = location.latitude
+//        val mLocation = LatLng(latitude, longitude)
+//        mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(mLocation, 10f))
+
 
         try {
+            // Request location updates
+         //   lm!!.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f,
+                //App.instance.repo.locationListener)
         } catch(ex: SecurityException) {
             Log.v(TAG, "Security Exception, no location available")
         }
@@ -70,7 +76,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLon
                 mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng))
                 App.instance.repo.currentLoc = latLng
             } else {
-                Toast.makeText(applicationContext, "You might have entered invalid location", Toast.LENGTH_SHORT)
+                Toast.makeText(applicationContext, "You might have entered an invalid location", Toast.LENGTH_LONG)
             }
         }
     }
@@ -81,25 +87,28 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLon
         mMap.setOnPoiClickListener(this)
         mMap.setOnMapLongClickListener(this)
         App.instance.repo.mMap = googleMap
-        if (isUpdate) {
-            val latlng = App.instance.repo.currentLoc
-            if (mMap != null) {
-                val marker = mMap!!.addMarker(MarkerOptions().position(latlng!!).title("Selected Location"))
-                mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15f))
-                mMap.animateCamera(CameraUpdateFactory.newLatLng(latlng))
-            }
-        }
         if (ContextCompat.checkSelfPermission(this, permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED) {
             // Permission is not granted
+            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission.ACCESS_FINE_LOCATION)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
             } else {
+                // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this, arrayOf(permission.ACCESS_FINE_LOCATION), 1)
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
             }
 
         } else {
             mMap.isMyLocationEnabled = true
         }
+        // Add a marker in Sydney and move the camera
+        val sydney = LatLng(-34.0, 151.0)
         val lm = getSystemService(LOCATION_SERVICE) as LocationManager
         val location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER)
         val longitude = location.longitude
@@ -107,7 +116,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLon
         val mLocation = LatLng(latitude, longitude)
         mMap!!.moveCamera(CameraUpdateFactory.newLatLngZoom(mLocation, 15f))
 
+
         try {
+            // Request location updates
+           // lm?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f,
+                //App.instance.repo.locationListener)
         } catch(ex: SecurityException) {
             Log.v(TAG, "Security Exception, no location available")
         }
@@ -134,7 +147,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMapLon
         builder.apply {
             setTitle("Selected Location")
             setMessage("Set this as the desired destination?")
-            setPositiveButton("Yes") {_, _ ->
+            setPositiveButton("Yes") {dialog, id ->
                 App.instance.repo.currentLoc=p0
                 Toast.makeText(this@MapsActivity, "Location selected", Toast.LENGTH_SHORT).show()
             }
